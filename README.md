@@ -10,6 +10,7 @@ Or at least stubs to it. But it works that way... so the solution is:
 
  com.norbertsram.yamc.YetAnotherMinesweeperCloneApp().main().
 
- Note the parantheses after 'YetAnotherMinesweeperCloneApp'! I didn't in the tutorial.
+ Note the parentheses after 'YetAnotherMinesweeperCloneApp'! I didn't in the tutorial... and I if you read the tutorial
+ carefully - unlike me - and you are not colorblind then you will see that it is NOTED with the color red.
 
  Now that I see that it indeed does work, time to set up some kind of LiveReload support.
