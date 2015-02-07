@@ -10,6 +10,9 @@ I still have to do some fiddling with the project setup, though more or less it 
 
 Time to set up some kind of LiveReload support! There is already a file watcher to recompile your application. You can access that
 using the **~fastOptJs** SBT target.
+The live reload solution provided by [workbench](https://github.com/lihaoyi/workbench) works as well. 
+The documentation not perfect, but the [example project](https://github.com/lihaoyi/workbench-example-app) contains a working solution.
+TODO: write down what I did to get it working
 
 Source mapping also works fine. **TODO: picture or it didn't happen!**
 

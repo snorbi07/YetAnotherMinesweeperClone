@@ -7,4 +7,9 @@ name := "YetAnotherMinesweeperClone"
 version := "1.0"
 
 scalaVersion := "2.11.5"
-    
+
+workbenchSettings
+
+bootSnippet := "com.norbertsram.yamc.YetAnotherMinesweeperCloneApp().main()"
+
+updateBrowsers <<= updateBrowsers.triggeredBy(fastOptJS in Compile)

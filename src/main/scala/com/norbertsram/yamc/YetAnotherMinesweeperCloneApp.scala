@@ -11,7 +11,7 @@ object YetAnotherMinesweeperCloneApp extends JSApp {
     val gameContent = document.getElementById("gameContent")
     
     val renderer: Renderer = new DomBasedRenderer(gameContent)
-    renderer.renderBoard(5, 5)
+    renderer.renderBoard(10, 10)
   }
   
 }
