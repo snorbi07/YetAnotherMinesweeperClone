@@ -12,7 +12,14 @@ Time to set up some kind of LiveReload support! There is already a file watcher 
 using the **~fastOptJs** SBT target.
 The live reload solution provided by [workbench](https://github.com/lihaoyi/workbench) works as well. 
 The documentation not perfect, but the [example project](https://github.com/lihaoyi/workbench-example-app) contains a working solution.
-TODO: write down what I did to get it working
+It doesn't take much work to add it to your own project. Just follow the guide found on the page of [workbench](https://github.com/lihaoyi/workbench).
+The only thing that needs to be changed is how you trigger Live Reloading. Instead of **packageJS** you need to use **fastOptJs**.
+
+```
+updateBrowsers <<= updateBrowsers.triggeredBy(fastOptJS in Compile)
+```
+  
+For the complete solution, just check the commit where I enabled workbench [bd50e20160b5cb53aa9d5851061e2b1f0737da00](https://github.com/snorbi07/YetAnotherMinesweeperClone/commit/bd50e20160b5cb53aa9d5851061e2b1f0737da00).
 
 Source mapping also works fine. **TODO: picture or it didn't happen!**
 
