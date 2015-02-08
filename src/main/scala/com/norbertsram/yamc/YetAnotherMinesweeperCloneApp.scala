@@ -9,9 +9,9 @@ object YetAnotherMinesweeperCloneApp extends JSApp {
   def main(): Unit = {
 
     val gameContent = document.getElementById("gameContent")
+    val renderer = new DomBasedRenderer(gameContent)
     
-    val renderer: Renderer = new DomBasedRenderer(gameContent)
-    renderer.renderBoard(10, 10)
+    renderer.renderBoard(12, 12)
   }
   
 }
