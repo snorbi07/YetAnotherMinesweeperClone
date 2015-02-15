@@ -91,7 +91,17 @@ As soon as I tried to run my application, I got the "cannot call 'createElement'
 Thanks to my superior cognitive abilities, I quickly came to the conclusion that I do need PhantomJS! Installing PhantomJS is just a matter of having some npm-fu skills. 
 Here is a [link](http://bit.ly/1CvAAgd) for the lazy bunch. Anyway, after having PhantomJS available I was able to execute tests.
 
+#### String interpolations are not your lightweight JSON solutions
+I wanted to use string interpolations to dump HTML5 _data-_ attributes to the DOM based representation of the board for storing cell coordinates.
+Just so I could easily deduce which cell was clicked... Well it turned out that there is a [bug](https://issues.scala-lang.org/browse/SI-6476) when it comes to string interpolation and escaping double quotes.
+Thankfully, StackOverflow came to the rescue as usual, it can be work around with a triple quotes! So the solution turned out to be quite ugly.
 
+```
+colNode.setAttribute("data-coordinate", s"""{ "row":$row, "column":$col }""")
+```
+
+#### The internet isn't full with Scala.js answers, libraries, resources... 
+You are mostly on your own. Even ClojureScript has more resources available. The tutorial and the handbook is quite nice though.
 
 
 

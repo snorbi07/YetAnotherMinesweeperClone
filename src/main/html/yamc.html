@@ -7,14 +7,13 @@
     <link rel="stylesheet" type="text/css" href="../css/yamc.css"/>
 </head>
 <body>
-
     <!-- FIXME(snorbi07): fix ugly hardcoded reference -->
     <script type="text/javascript" src="/workbench.js"></script>
     <script type="text/javascript" src="../../../target/scala-2.11/yetanotherminesweeperclone-jsdeps.js"></script>
     <!-- Include Scala.js compiled code -->
     <script type="text/javascript" src="../../../target/scala-2.11/yetanotherminesweeperclone-fastopt.js"></script>
 
-    <div id="gameContent"></div>
+    <div id="gameContent" onclick="com.norbertsram.yamc.YetAnotherMinesweeperCloneApp().clicked(event)"> </div>
 
     <!-- Execute the application -->
     <script>

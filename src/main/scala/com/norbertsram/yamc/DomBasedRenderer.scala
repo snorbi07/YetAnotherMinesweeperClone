@@ -1,7 +1,10 @@
 package com.norbertsram.yamc
 
+import com.norbertsram.yamc.model._
 import org.scalajs.dom
 import org.scalajs.dom.document
+
+import scala.scalajs.js.JSON
 
 
 class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
@@ -10,8 +13,15 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
   val cellStyle = "border: 2px solid black; padding: 2px;"
   
   // FIXME (snorbi07): convert to functional style
-  override def renderBoard(rows: Int, columns: Int): Unit = {
-    if (targetNode == null) return;
+  override def renderBoard(board: Board): Unit = {
+    val rows = board.numberOfRows
+    val columns = board.numberOfColumns
+
+    if (targetNode == null) {
+      // FIXME: handle error
+      return 
+    }
+    
     val tableNode = document.createElement("table")
     tableNode.setAttribute("style", boardStyle)
     val tableBody = document.createElement("tbody")
@@ -24,14 +34,23 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
       for (col <- 0 until columns) {
         val colNode = document.createElement("td")
         colNode.setAttribute("style", cellStyle)
-        val position = document.createTextNode(s"$row,$col")
-        colNode.appendChild(position)
+        colNode.setAttribute("data-coordinate", s"""{ "row":$row, "column":$col }""")
+        val cell: Cell = board.getCell(Coordinate(row, col))
+        colNode.appendChild(cellRepresentation(cell))
         rowNode.appendChild(colNode)
       }
     }
 
-//    targetNode.textContent = ""
+    targetNode.textContent = ""
     targetNode.appendChild(tableNode)
+  }
+  
+  def cellRepresentation(cell: Cell) = cell match {
+    case Unturned(_) => document.createTextNode("#")
+    case Flagged(_) => document.createTextNode("?")
+    case Neighbouring(threatLevel) => document.createTextNode(threatLevel.toString) 
+    case Empty => document.createTextNode(" ")  
+    case Mine => document.createTextNode("KABOOM!")  
   }
   
 }

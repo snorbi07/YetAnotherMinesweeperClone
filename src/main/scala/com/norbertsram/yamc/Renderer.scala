@@ -1,7 +1,9 @@
 package com.norbertsram.yamc
 
+import com.norbertsram.yamc.model.Board
+
 trait Renderer {
 
-  def renderBoard(width: Int, height: Int) : Unit
+  def renderBoard(board: Board) : Unit
   
 }

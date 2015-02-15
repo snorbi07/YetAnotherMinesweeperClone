@@ -30,17 +30,21 @@ object BoardTest extends TestSuite {
   
   def cellGenerator(coordinate: Coordinate) = testBoardData.get(coordinate).get
   
-  val testBoard = new Board(3, 3, cellGenerator)
+  val testBoard = new Board(3, 3, Some(cellGenerator))
   
   def tests = TestSuite {
-    'emptyCellState {
-      assert(Empty.hasMine == false)
-      assert(Empty.isTurned == true)
+    'turnedCellShouldBeEmpty {
+      val turnCoordinate = Coordinate(2, 2)
+      testBoard.turn(turnCoordinate)
+      val turnedCell: Cell = testBoard.getCell(turnCoordinate)
+      assert(turnedCell == Empty)
     }
-    'turnUnturned {
-      val unturnedEmptyCell = Unturned(false)
-      val emptyCell = Cell.turn(unturnedEmptyCell)
-      assert(emptyCell == Empty)
+    'turnedCellShouldBeNeighbouring {
+      val turnCoordinate = Coordinate(1, 1)
+      testBoard.turn(turnCoordinate)
+      val turnedCell: Cell = testBoard.getCell(turnCoordinate)
+      print(turnedCell)
+      assert(turnedCell == Empty)
     }
   }
   
