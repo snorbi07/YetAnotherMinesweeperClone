@@ -76,6 +76,22 @@ With the Live Reload setup of workbench you don't have source mapping support. Y
 at least Chrome's Developers Tools does not find it. I've tried adding it with the _Add Source Map..._ menu item, but it did not do anything.
 I'll have to check out the workbench examples whether it works there. I have to admit, I'm not happy about this.
 
+#### Executing unit test requires PhantomJS
+If you follow the Scala.js tutorial, you'll get to the point where it shows you how to enable unit testing. The first step is to support the DOM.
+That is quite simple, you just have to add a single line to your _build.sbt_:
+
+```
+jsDependencies += RuntimeDOM
+```
+
+That is it! It works! Well... not quite. At least not for me. The tutorial states that this will utilize PhantomJS if available, otherwise Rhino to give you some kind of fake DOM.
+Don't forget, we are creating a web application, so you do need this! Anyways, you should be able to use this fake DOM to run your application or tests. 
+I didn't have PhantomJS installed and didn't want to bother thinking the Rhino's fake DOM will be good enough for me. I was wrong. 
+As soon as I tried to run my application, I got the "cannot call 'createElement' of undefined", where the 'undefined' placholder was the _org.scalajs.dom.document_.
+Thanks to my superior cognitive abilities, I quickly came to the conclusion that I do need PhantomJS! Installing PhantomJS is just a matter of having some npm-fu skills. 
+Here is a [link](http://bit.ly/1CvAAgd) for the lazy bunch. Anyway, after having PhantomJS available I was able to execute tests.
+
+
 
 
 

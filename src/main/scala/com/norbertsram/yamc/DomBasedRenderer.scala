@@ -11,12 +11,13 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
   
   // FIXME (snorbi07): convert to functional style
   override def renderBoard(rows: Int, columns: Int): Unit = {
+    if (targetNode == null) return;
     val tableNode = document.createElement("table")
     tableNode.setAttribute("style", boardStyle)
     val tableBody = document.createElement("tbody")
-    
+
     tableNode.appendChild(tableBody)
-    
+
     for (row <- 0 until rows) {
       val rowNode = document.createElement("tr")
       tableBody.appendChild(rowNode)
@@ -29,7 +30,7 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
       }
     }
 
-    targetNode.textContent = ""
+//    targetNode.textContent = ""
     targetNode.appendChild(tableNode)
   }
   

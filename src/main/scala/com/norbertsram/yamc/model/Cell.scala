@@ -21,7 +21,7 @@ case class Surrounding(minesInNeighbourhood: Int) extends Cell {
 
 case object Empty extends Cell {
   override val hasMine: Boolean = false
-  override val isTurned: Boolean = false
+  override val isTurned: Boolean = true
 }
 
 case object Mine extends Cell {
