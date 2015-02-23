@@ -17,7 +17,8 @@ object YetAnotherMinesweeperCloneApp extends JSApp {
   def main(): Unit = {
     val gameContent = document.getElementById("gameContent")
     renderer = new DomBasedRenderer(gameContent)
-    game = new Game(8, 8)    
+    game = new Game(8, 8)
+    renderGame
   }
   
   def renderGame = renderer renderBoard game.board
@@ -32,8 +33,9 @@ object YetAnotherMinesweeperCloneApp extends JSApp {
     val column = json.column.asInstanceOf[Int]
     println(s"Clicked cell: ($row,$column)")
 
-    Coordinate(row, column)
-    
+    val coordinate: Coordinate = Coordinate(row, column)
+    game.turn(coordinate)
+
     renderGame
   }
   

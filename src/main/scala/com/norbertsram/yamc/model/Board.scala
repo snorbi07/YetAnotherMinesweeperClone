@@ -11,9 +11,9 @@ class Board(val cells: Map[Coordinate, Cell]) {
    4  C C C C C   
    */
   // FIXME
-  def numberOfRows = 3
+  def numberOfRows = 8
   
-  def numberOfColumns = 3
+  def numberOfColumns = 8
   
   def getCell(coordinate: Coordinate): Cell = {
     if (!cells.contains(coordinate)) {
@@ -26,6 +26,9 @@ class Board(val cells: Map[Coordinate, Cell]) {
     val cell = getCell(coordinate)
     val neighbours = neighbourCoordinates(coordinate).map(getCell)
     val newCellState = turnCell(cell, neighbours)
+
+
+
     new Board(cells.updated(coordinate, newCellState))
   }
 
@@ -53,18 +56,17 @@ class Board(val cells: Map[Coordinate, Cell]) {
 
   private def turnCell(cell: Cell, neighbours: List[Cell]) : Cell = {
     def newCellState() = {
-      if (cell.hasMine) {
-        Mine
-      } 
+      if (cell.hasMine) Mine
       else {
         val threatValue: Int = neighbours.filter(_ != Empty).foldLeft(0) { (acc, cell) => if (cell.hasMine) acc + 1 else acc }
         if (threatValue == 0) Empty else Neighbouring(threatValue)
       }
     }
+
     cell match {
       case Unturned(hasMine) => newCellState()
       case Flagged(hasMine) => newCellState()
-      case _ => throw new IllegalArgumentException(s"Cannot turn cell in state ${cell.getClass}")
+      case _ => _
     }
   }
 
