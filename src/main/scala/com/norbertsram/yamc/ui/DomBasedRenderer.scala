@@ -1,10 +1,8 @@
-package com.norbertsram.yamc
+package com.norbertsram.yamc.ui
 
 import com.norbertsram.yamc.model._
 import org.scalajs.dom
 import org.scalajs.dom.document
-
-import scala.scalajs.js.JSON
 
 
 class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {

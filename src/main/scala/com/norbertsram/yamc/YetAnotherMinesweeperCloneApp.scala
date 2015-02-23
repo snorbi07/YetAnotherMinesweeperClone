@@ -1,20 +1,26 @@
 package com.norbertsram.yamc
 
-import com.norbertsram.yamc.model._
+import com.norbertsram.yamc.model.Coordinate
+import com.norbertsram.yamc.ui.{Renderer, DomBasedRenderer}
 import org.scalajs.dom
 import org.scalajs.dom.document
 
-import scala.scalajs.js.{Dynamic, JSON, JSApp}
 import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.{JSApp, JSON}
 
 object YetAnotherMinesweeperCloneApp extends JSApp {
 
+  var game : Game = null
+  
+  var renderer : Renderer = null
+  
   def main(): Unit = {
     val gameContent = document.getElementById("gameContent")
-    val renderer = new DomBasedRenderer(gameContent)
-    val board: Board = new Board(8, 8)
-    renderer.renderBoard(board)
+    renderer = new DomBasedRenderer(gameContent)
+    game = new Game(8, 8)    
   }
+  
+  def renderGame = renderer renderBoard game.board
   
   @JSExport
   def clicked(event: dom.MouseEvent): Unit = {
@@ -25,6 +31,10 @@ object YetAnotherMinesweeperCloneApp extends JSApp {
     val row = json.row.asInstanceOf[Int]
     val column = json.column.asInstanceOf[Int]
     println(s"Clicked cell: ($row,$column)")
+
+    Coordinate(row, column)
+    
+    renderGame
   }
   
 }
