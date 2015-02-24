@@ -1,6 +1,6 @@
 package com.norbertsram.yamc
 
-import com.norbertsram.yamc.model.{Board, Cell, Coordinate, Unturned}
+import com.norbertsram.yamc.model._
 
 // Mutable state of the game
 class Game(numberOfColumns: Int, numberOfRows: Int) {
@@ -16,20 +16,20 @@ class Game(numberOfColumns: Int, numberOfRows: Int) {
     board
   }
   
-  private def newGame(numberOfColumns: Int, numberOfRows: Int) : Map[Coordinate, Cell] = {
+  private def newGame(numberOfColumns: Int, numberOfRows: Int) : Map[Coordinate, CellType] = {
     val coordinates = for (i <- 0 until numberOfColumns; j <- 0 until numberOfRows) yield Coordinate(i, j)
-    coordinates.foldLeft(Map.empty[Coordinate, Cell])(addRandomCell)
+    coordinates.foldLeft(Map.empty[Coordinate, CellType])(addRandomCell)
   }
 
-  private def addRandomCell(board: Map[Coordinate, Cell], coordinate: Coordinate) : Map[Coordinate, Cell] = {
-    val generator: (Coordinate) => Cell = randomCellGenerator
+  private def addRandomCell(board: Map[Coordinate, CellType], coordinate: Coordinate) : Map[Coordinate, CellType] = {
+    val generator: (Coordinate) => CellType = randomCellGenerator
     board + (coordinate -> generator(coordinate))
   }
 
-  private def randomCellGenerator(coordinate: Coordinate): Cell = {
+  private def randomCellGenerator(coordinate: Coordinate): CellType = {
     val difficulty = 0.10 // easy or something... this is where you would vary values is you want to change the difficulty
-    def hasMineStream = math.random < difficulty
-    Unturned(hasMineStream)
+    def hasMine = math.random < difficulty
+    if (hasMine) UnturnedMine else UnturnedEmpty
   }
   
 }

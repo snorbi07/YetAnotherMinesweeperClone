@@ -36,13 +36,13 @@ object BoardTest extends TestSuite {
     'turnedCellShouldBeEmpty {
       val turnCoordinate = Coordinate(2, 2)
       testBoard.turn(turnCoordinate)
-      val turnedCell: Cell = testBoard.getCell(turnCoordinate)
+      val turnedCell: CellType = testBoard.getCell(turnCoordinate)
       assert(turnedCell == Empty)
     }
     'turnedCellShouldBeNeighbouring {
       val turnCoordinate = Coordinate(1, 1)
       testBoard.turn(turnCoordinate)
-      val turnedCell: Cell = testBoard.getCell(turnCoordinate)
+      val turnedCell: CellType = testBoard.getCell(turnCoordinate)
       print(turnedCell)
       assert(turnedCell == Empty)
     }
