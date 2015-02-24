@@ -21,18 +21,24 @@ class Board(val cells: Map[Coordinate, Cell]) {
     }
     cells.get(coordinate).get
   } 
-    
+  
   def turn(coordinate: Coordinate) : Board = {
     val cell = getCell(coordinate)
-    val neighbours = neighbourCoordinates(coordinate).map(getCell)
+    val neighbours = neighbourCells(coordinate).map(getCell)
     val newCellState = turnCell(cell, neighbours)
 
-
-
-    new Board(cells.updated(coordinate, newCellState))
+    new Board (revealNeighbours(coordinate).cells.updated(coordinate, newCellState))
+//    new Board(cells.updated(coordinate, newCellState))
   }
 
-  private def neighbourCoordinates(coordinate: Coordinate): List[Coordinate] = {
+  def revealNeighbours(coordinate: Coordinate) : Board = {
+    val neighbours = neighbourCells(coordinate)
+    val emptyNeighbours: List[Coordinate] = neighbours.filter(c => !getCell(c).hasMine)
+    val left: Map[Coordinate, Cell] = emptyNeighbours.foldLeft(cells) { (acc, c) => acc + (c -> turnCell(getCell(c),  neighbourCells(coordinate).map(getCell))) }
+    new Board(left)
+  }
+  
+  private def neighbourCells(coordinate: Coordinate): List[Coordinate] = {
     val row = coordinate.row
     val col = coordinate.column
 
@@ -66,7 +72,7 @@ class Board(val cells: Map[Coordinate, Cell]) {
     cell match {
       case Unturned(hasMine) => newCellState()
       case Flagged(hasMine) => newCellState()
-      case _ => _
+      case _ => cell
     }
   }
 
