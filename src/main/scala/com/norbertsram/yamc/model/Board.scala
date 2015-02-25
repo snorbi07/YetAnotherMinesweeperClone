@@ -1,7 +1,7 @@
 package com.norbertsram.yamc.model
 
 
-case class Board(val cells: Map[Coordinate, CellType]) {
+case class Board(cells: Map[Coordinate, Cell]) {
   
   /*  0 1 2 3 4 - number of columns = 4
    0  C C C C C
@@ -15,63 +15,71 @@ case class Board(val cells: Map[Coordinate, CellType]) {
   
   def numberOfColumns = 8
   
-  def getCell(coordinate: Coordinate): CellType = {
+  def getCell(coordinate: Coordinate): Cell = {
     if (!cells.contains(coordinate)) {
       throw new IllegalArgumentException(s"${this.getClass.getSimpleName} does not contain a cell for the coordinate $coordinate")
     }
+    
     cells.get(coordinate).get
   } 
   
+  def updateCell(coordinate: Coordinate, cell: Cell) : Board = Board(cells.updated(coordinate, cell))
+  
   def turn(coordinate: Coordinate) : Board = {
+
+    def turnCell(cell: Cell) : Cell = {      
+      lazy val threat = threatValue(cell)
+
+      cell.cellType match {
+        case UnturnedMine => cell.withType(Mine)
+        case UnturnedEmpty => if (threat > 0)  cell.withType(Neighbouring(threat)) else cell.withType(Empty);
+        case _ => cell
+      }
+    }
+    
     val cell = getCell(coordinate)
-    val neighbours = neighbourCells(coordinate)
-    val newCellState = turnCell(cell, neighbours)
+    val newCellState = turnCell(cell)
     val updatedBoard = Board(cells.updated(coordinate, newCellState))
-    val canBeTurned = !neighbourCells(coordinate).filter(_ == UnturnedEmpty).isEmpty
-    if (canBeTurned && newCellState != Mine)
-      revealNeighbours(coordinate, updatedBoard)
+    val canBeTurned = !neighbourCells(cell).filter( c => c.cellType == UnturnedEmpty && threatValue(c) == 0).isEmpty
+    if (canBeTurned && newCellState.cellType != Mine)
+      revealNeighbours(cell, updatedBoard)
     else
       updatedBoard
   }
 
-  def revealNeighbours(coordinate: Coordinate, board: Board) : Board = {
-    val neighbours = neighbourCoordinates(coordinate)
-    val emptyNeighbours = neighbours.filter(c => getCell(c) == UnturnedEmpty)
-    emptyNeighbours.foldLeft(board)(_.turn(_))
+  def revealNeighbours(cell: Cell, board: Board) : Board = {
+    val emptyNeighbours = neighbourCells(cell).filter(_.cellType == UnturnedEmpty)
+    emptyNeighbours.foldLeft(board)((acc, c) => acc.turn(c.coordinate))
   }
 
-  private def neighbourCoordinates(coordinate: Coordinate): List[Coordinate] = {
-    val row = coordinate.row
-    val col = coordinate.column
+  def threatValue(cell: Cell) =
+    neighbourCells(cell).filter(_.cellType != Empty).foldLeft(0)((acc, cell) => if (cell.cellType == UnturnedMine) acc + 1 else acc)
 
-    val potentialNeighbours = List(
-      Coordinate(row - 1, col - 1),
-      Coordinate(row - 1, col),
-      Coordinate(row - 1, col + 1),
 
-      Coordinate(row, col - 1),
-      //current coordinate (row, col)
-      Coordinate(row, col + 1),
+  def neighbourCells(cell: Cell) = {
+    def neighbourCoordinates(coordinate: Coordinate): List[Coordinate] = {
+      val row = coordinate.row
+      val col = coordinate.column
 
-      Coordinate(row + 1, col - 1),
-      Coordinate(row + 1, col),
-      Coordinate(row + 1, col + 1)
-    )
+      val potentialNeighbours = List(
+        Coordinate(row - 1, col - 1),
+        Coordinate(row - 1, col),
+        Coordinate(row - 1, col + 1),
 
-    // we might be at the edge of the table, so we need to filter the potential neighbours list
-    potentialNeighbours.filter(cells.contains)
-  }
-  
-  private def neighbourCells = neighbourCoordinates(_ : Coordinate).map(getCell)
+        Coordinate(row, col - 1),
+        //current coordinate (row, col)
+        Coordinate(row, col + 1),
 
-  private def turnCell(cell: CellType, neighbours: List[CellType]) : CellType = {
-    lazy val threatValue = neighbours.filter(_ != Empty).foldLeft(0) { (acc, cell) => if (cell.hasMine) acc + 1 else acc }
-
-    cell match {
-      case UnturnedMine => Mine
-      case UnturnedEmpty => if (threatValue > 0) Neighbouring(threatValue) else Empty
-      case _ => cell
+        Coordinate(row + 1, col - 1),
+        Coordinate(row + 1, col),
+        Coordinate(row + 1, col + 1)      
+      )
+      
+      // we might be at the edge of the table, so we need to filter the potential neighbours list
+      potentialNeighbours.filter(cells.contains)
     }
-  }
 
+    neighbourCoordinates(cell.coordinate).map(getCell)
+  } 
+    
 }

@@ -104,7 +104,7 @@ colNode.setAttribute("data-coordinate", s"""{ "row":$row, "column":$col }""")
 You are mostly on your own. Even ClojureScript has more resources available. The tutorial and the handbook is quite nice though.
 
 #### Debugging ain't pretty when it comes to Scala standard libraries
-You do have source mapping, however Scala types such as List for example do not have a pretty representation
+You do have source mapping, however Scala types such as List for example do not have a pretty representation. TODO: pictures and more explanation.
 
 
 

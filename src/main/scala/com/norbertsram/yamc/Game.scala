@@ -16,20 +16,20 @@ class Game(numberOfColumns: Int, numberOfRows: Int) {
     board
   }
   
-  private def newGame(numberOfColumns: Int, numberOfRows: Int) : Map[Coordinate, CellType] = {
+  private def newGame(numberOfColumns: Int, numberOfRows: Int) : Map[Coordinate, Cell] = {
     val coordinates = for (i <- 0 until numberOfColumns; j <- 0 until numberOfRows) yield Coordinate(i, j)
-    coordinates.foldLeft(Map.empty[Coordinate, CellType])(addRandomCell)
+    coordinates.foldLeft(Map.empty[Coordinate, Cell])(addRandomCell)
   }
 
-  private def addRandomCell(board: Map[Coordinate, CellType], coordinate: Coordinate) : Map[Coordinate, CellType] = {
-    val generator: (Coordinate) => CellType = randomCellGenerator
+  private def addRandomCell(board: Map[Coordinate, Cell], coordinate: Coordinate) : Map[Coordinate, Cell] = {
+    val generator: (Coordinate) => Cell = randomCellGenerator
     board + (coordinate -> generator(coordinate))
   }
 
-  private def randomCellGenerator(coordinate: Coordinate): CellType = {
+  private def randomCellGenerator(coordinate: Coordinate): Cell = {
     val difficulty = 0.10 // easy or something... this is where you would vary values is you want to change the difficulty
     def hasMine = math.random < difficulty
-    if (hasMine) UnturnedMine else UnturnedEmpty
+    if (hasMine) new Cell(coordinate, UnturnedMine) else new Cell(coordinate,UnturnedEmpty)
   }
   
 }

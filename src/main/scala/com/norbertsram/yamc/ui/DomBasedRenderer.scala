@@ -33,8 +33,8 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
         val colNode = document.createElement("td")
         colNode.setAttribute("style", cellStyle)
         colNode.setAttribute("data-coordinate", s"""{ "row":$row, "column":$col }""")
-        val cell: CellType = board.getCell(Coordinate(row, col))
-        colNode.appendChild(cellRepresentation(cell))
+        val cell = board.getCell(Coordinate(row, col))
+        colNode.appendChild(cellRepresentation(cell.cellType))
         rowNode.appendChild(colNode)
       }
     }
@@ -47,8 +47,8 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
     case UnturnedEmpty | UnturnedMine => document.createTextNode("#")
     case Flagged(_) => document.createTextNode("?")
     case Neighbouring(threatLevel) => document.createTextNode(threatLevel.toString) 
-    case Empty => document.createTextNode(" ")  
-    case Mine => document.createTextNode("KABOOM!")  
+    case Empty => document.createTextNode(" ")
+    case Mine => document.createTextNode("X")
   }
   
 }
