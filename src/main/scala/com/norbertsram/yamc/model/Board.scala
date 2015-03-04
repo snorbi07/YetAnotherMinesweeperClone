@@ -27,7 +27,7 @@ case class Board(cells: Map[Coordinate, Cell]) {
   
   def turn(coordinate: Coordinate) : Board = {
 
-    def turnCell(cell: Cell) : Cell = {      
+    def turnCell(cell: Cell) : Cell = {
       lazy val threat = threatValue(cell)
 
       cell.cellType match {
@@ -48,7 +48,7 @@ case class Board(cells: Map[Coordinate, Cell]) {
   }
 
   def revealNeighbours(cell: Cell, board: Board) : Board = {
-    val emptyNeighbours = neighbourCells(cell).filter(_.cellType == UnturnedEmpty)
+    val emptyNeighbours = neighbourCells(cell).filter(_.cellType == UnturnedEmpty && threatValue(cell) == 0)
     emptyNeighbours.foldLeft(board)((acc, c) => acc.turn(c.coordinate))
   }
 

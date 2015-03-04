@@ -40,6 +40,12 @@ skip in packageJSDependencies := false
 No more CDN, ext folder or whatever setup. Best thing is that Scala.js libraries that you get using WebJars support this.
 The final JavaScript bundle contains the transient JavaScript dependencies as well. **You can just build, deploy and stop worrying.**
 
+
+#### Styling 
+Since I did not want to bother myself with coming up with some basic CSS styling, I turned to the all might Google.
+After a quick search I stumbled upon [Ben's blog](http://www.bennadel.com/blog/1737-jquery-powered-mine-sweeper-game.htm).
+I borrowed his clean and slick Minesweeper look. Thanks Ben!
+
 ### Stuff I bumped into
 
 #### Scala objects are mapped to JavaScript objects, BUT you acquire them through a JavaScript function.

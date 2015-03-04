@@ -21,7 +21,7 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
     }
     
     val tableNode = document.createElement("table")
-    tableNode.setAttribute("style", boardStyle)
+    tableNode.setAttribute("class", "mineSweeper")
     val tableBody = document.createElement("tbody")
 
     tableNode.appendChild(tableBody)
@@ -31,9 +31,9 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
       tableBody.appendChild(rowNode)
       for (col <- 0 until columns) {
         val colNode = document.createElement("td")
-        colNode.setAttribute("style", cellStyle)
-        colNode.setAttribute("data-coordinate", s"""{ "row":$row, "column":$col }""")
         val cell = board.getCell(Coordinate(row, col))
+        colNode.setAttribute("class", styleForCellType(cell.cellType))
+        colNode.setAttribute("data-coordinate", s"""{ "row":$row, "column":$col }""")
         colNode.appendChild(cellRepresentation(cell.cellType))
         rowNode.appendChild(colNode)
       }
@@ -42,9 +42,17 @@ class DomBasedRenderer(val targetNode: dom.Node) extends Renderer {
     targetNode.textContent = ""
     targetNode.appendChild(tableNode)
   }
-  
+
+  def styleForCellType(cellType: CellType) = cellType match {
+    case UnturnedEmpty | UnturnedMine => "active"
+    case Flagged(_) => "caution"
+    case Neighbouring(threatLevel) => ""
+    case Empty => ""
+    case Mine => "bomb bombed"
+  }
+
   def cellRepresentation(cell: CellType) = cell match {
-    case UnturnedEmpty | UnturnedMine => document.createTextNode("#")
+    case UnturnedEmpty | UnturnedMine => document.createTextNode(" ")
     case Flagged(_) => document.createTextNode("?")
     case Neighbouring(threatLevel) => document.createTextNode(threatLevel.toString) 
     case Empty => document.createTextNode(" ")
